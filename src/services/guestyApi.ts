@@ -20,8 +20,25 @@ guestyApi.interceptors.request.use((config) => {
 });
 
 export const getProperties = async (): Promise<GuestyProperty[]> => {
-  const response = await guestyApi.get('/listings');
-  return response.data.results;
+  try {
+    const response = await guestyApi.get('/listings', {
+      params: {
+        limit: 50,
+        offset: 0,
+        fields: 'title,picture,address,bedrooms,bathrooms,accommodates,prices,amenities,description'
+      }
+    });
+    
+    if (response.data && response.data.results) {
+      return response.data.results;
+    }
+    
+    console.error('Invalid API response structure:', response.data);
+    return [];
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    return [];
+  }
 };
 
 export const checkAvailability = async (

@@ -15,7 +15,12 @@ const PropertyList = () => {
 
   const { data: properties, isLoading, error } = useQuery({
     queryKey: ['properties'],
-    queryFn: getProperties
+    queryFn: getProperties,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    retry: 3,
+    onError: (error) => {
+      console.error('Error fetching properties:', error);
+    }
   });
 
   const filteredProperties = properties?.filter(property =>
@@ -86,14 +91,14 @@ const PropertyList = () => {
           <div className="text-center py-12 text-red-600">
             Error loading properties. Please try again later.
           </div>
-        ) : (
+        ) : filteredProperties && filteredProperties.length > 0 ? (
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {filteredProperties?.map((property: GuestyProperty) => (
+            {filteredProperties.map((property: GuestyProperty) => (
               <PropertyCard
                 key={property._id}
                 property={property}
@@ -101,6 +106,10 @@ const PropertyList = () => {
               />
             ))}
           </motion.div>
+        ) : (
+          <div className="text-center py-12 text-gray-600">
+            No properties found. Please try different search criteria.
+          </div>
         )}
       </div>
     </section>

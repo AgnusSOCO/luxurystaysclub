@@ -10,6 +10,12 @@ export interface GuestyProperty {
     full: string;
     city: string;
     state: string;
+    country: string;
+    zipcode: string;
+    lat: number;
+    lng: number;
+    street: string;
+    unit: string;
   };
   bedrooms: number;
   bathrooms: number;
@@ -17,9 +23,16 @@ export interface GuestyProperty {
   prices: {
     basePrice: number;
     minNights: number;
+    maxNights: number;
+    weekendPrice: number;
+    weeklyPrice: number;
+    monthlyPrice: number;
+    cleaningFee: number;
   };
   amenities: string[];
   description: string;
+  houseRules: string[];
+  cancelationPolicy: string;
 }
 
 export interface BookingDates {
@@ -30,4 +43,10 @@ export interface BookingDates {
 export interface GuestyAvailability {
   available: boolean;
   price: number;
+  minimumStay: number;
+  maximumStay: number;
+  restrictions: {
+    noCheckIn: boolean;
+    noCheckOut: boolean;
+  };
 }
